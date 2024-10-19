@@ -1,11 +1,6 @@
 from pandas import DataFrame
-from numpy import mean
 from give_price import normalize, normalize_list
 
-def find_intercept(a, x1, y1):
-# Using the formula b = y1 - a * x1
-    b = y1 - a * x1
-    return b
 
 def train_model(lhs: DataFrame, rhs: DataFrame):
     theta_0 = 0
