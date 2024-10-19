@@ -65,7 +65,7 @@ def normalize_list(values: list) -> list:
 
     return nvalues
 
-def display_points(fig: any, ax: any, frame_x: DataFrame, frame_y: DataFrame, b: float, coeff: float, showed: bool=False) -> None:
+def display_points(fig: any, ax: any, frame_x: DataFrame, frame_y: DataFrame, b: float, coeff: float) -> None:
 
     y_pred = []
 
@@ -76,17 +76,15 @@ def display_points(fig: any, ax: any, frame_x: DataFrame, frame_y: DataFrame, b:
     # print("nonox", normalize(frame_x))
     # print("nonoy", normalize(frame_y))
 
-    if showed == True:
-        show()
+    tight_layout()
+    savefig('output_normalized')
+    show()
 
-    else:
-        tight_layout()
-        savefig('output_normalized', dpi=100)
+    ax.scatter(frame_x, frame_y)
 
-        fig, ax = subplots()
-        ax.scatter(frame_x, frame_y)
+    tight_layout()
+    savefig('output_real', dpi=100)
 
-        tight_layout()
-        savefig('output_real', dpi=100)
+
 
 

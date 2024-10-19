@@ -9,7 +9,7 @@ def main():
     fig, ax = subplots()
     for i in range(1000, 10000):
         theta_0, theta_1 = train_model(lhs, rhs, i)
-        display_points(fig, ax, lhs, rhs, theta_0, theta_1, True)
+        display_points(fig, ax, lhs, rhs, theta_0, theta_1)
         print("theta_0", theta_0)
         print("theta_1", theta_1)
     display_points(fig, ax, lhs, rhs, theta_0, theta_1)
