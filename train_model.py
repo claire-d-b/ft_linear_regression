@@ -2,7 +2,7 @@ from pandas import DataFrame
 from give_price import normalize, normalize_list
 
 
-def train_model(lhs: DataFrame, rhs: DataFrame):
+def train_model(lhs: DataFrame, rhs: DataFrame, iterations: int):
     theta_0 = 0
     theta_1 = 0
     se = 0
@@ -11,11 +11,13 @@ def train_model(lhs: DataFrame, rhs: DataFrame):
     thetas_1 = []
     ses = []
     lst = [(0, 0, 0)]
+    sorted_list = []
+    index = 0
     try:
-        for i in range(1000):
+        for i in range(iterations):
             # if i == 500:
             #     break
-            theta_1 = float(i / 1000)
+            theta_1 = float(i / iterations)
             for j, (x_unit, y_unit) in enumerate(zip(lhs, rhs)):
                 y = theta_1 * x_unit + theta_0
                 if i == 0:

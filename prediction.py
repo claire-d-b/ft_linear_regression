@@ -11,7 +11,7 @@ def main():
     rhs = get_values(df, "price")
     ret = theta_0 + theta_1 * float(mileage)
     print("Before training: ", ret)
-    theta_0, theta_1 = train_model(lhs, rhs)
+    theta_0, theta_1 = train_model(lhs, rhs, 1000)
     print("After training: ", theta_0 + theta_1 * float(mileage))
 
 
