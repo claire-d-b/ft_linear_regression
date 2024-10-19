@@ -1,4 +1,5 @@
-from matplotlib.pyplot import legend, savefig, tight_layout, subplots, show
+from matplotlib.pyplot import legend, savefig, tight_layout, subplots, show, plot
+from matplotlib.animation import FuncAnimation
 from pandas import DataFrame, read_csv
 
 
@@ -37,7 +38,6 @@ def get_values(df: DataFrame, keyword: str) -> DataFrame:
         # print(df.columns)
 
         col = df[keyword]
-        print(col)
 
 
     except Exception as e:
@@ -46,28 +46,45 @@ def get_values(df: DataFrame, keyword: str) -> DataFrame:
     return col
 
 def normalize(values: DataFrame) -> DataFrame:
-    print("max", values.max())
 
     nvalues = []
     for i, unit in enumerate(values):
         nvalues.insert(i, unit / values.max())
-    print("NVAL", nvalues)
+
     return DataFrame(nvalues)
 
-def display_points(frame_x: DataFrame, frame_y: DataFrame) -> None:
 
-    print("x", frame_x)
-    print(frame_y)
-    print("normalizex", normalize(frame_x))
+def normalize_list(values: list) -> list:
+    # flattened_values = [item for sublist in values for item in sublist]
+    nvalues = []
+    for i, unit in enumerate(values):
+        try:
+            nvalues.insert(i, unit / max(values))
+        except Exception as e:
+            raise AssertionError(f"Error: {e}")
+
+    return nvalues
+
+def display_points(frame_x: DataFrame, frame_y: DataFrame, b: float, coeff: float) -> None:
+
+    y_pred = []
 
     fig, ax = subplots()
+
+    for i, unit in enumerate(frame_x):
+        y_pred.insert(i, coeff * unit + b)
+    ax.plot(normalize(frame_x), normalize_list(y_pred))
     ax.scatter(normalize(frame_x), normalize(frame_y))
+    # print("nonox", normalize(frame_x))
+    # print("nonoy", normalize(frame_y))
 
     tight_layout()
-    savefig('output_real', dpi=100)
+    savefig('output_normalized', dpi=100)
 
     fig, ax = subplots()
     ax.scatter(frame_x, frame_y)
 
     tight_layout()
-    savefig('output_normalized', dpi=100)
+    savefig('output_real', dpi=100)
+
+
