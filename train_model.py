@@ -25,7 +25,7 @@ def train_model(lhs: DataFrame, rhs: DataFrame, iterations: int) -> tuple:
                     se = (y - y_unit) ** 2
                     theta_0 = - theta_1 * x_unit - y
                     lst.insert(j, (theta_0, theta_1, se))
-                    sorted_list = sorted(lst, key=lambda x: x[2])
+                    # sorted_list = sorted(lst, key=lambda x: x[2])
                     index = j
 
                 elif ((y - y_unit) ** 2 < se):
@@ -33,15 +33,15 @@ def train_model(lhs: DataFrame, rhs: DataFrame, iterations: int) -> tuple:
                     theta_0 = - theta_1 * x_unit - y
                     lst.insert(j, (theta_0, theta_1, se))
                     # Sort by the third element of the tuple (alphabetically)
-                    sorted_list = sorted(lst, key=lambda x: x[2])
+                    # sorted_list = sorted(lst, key=lambda x: x[2])
                     index = j
-        theta0 = - sorted_list[index][0] * 0.1 # step unit in the graph normalized (btw 0 and 1)
-        theta1 = - sorted_list[index][1] / len(lhs)
+        theta0 = - lst[index][0] * 0.1 # step unit in the graph normalized (btw 0 and 1)
+        theta1 = - lst[index][1] / len(lhs)
         print(theta0)
         print(theta1)
-        a, b, max_value_tuple = max(sorted_list, key=lambda x: x[2])
-        a, b, min_value_tuple = min(sorted_list, key=lambda x: x[2])
-        mse = ((max_value_tuple + min_value_tuple) / len(sorted_list)) ** 0.5
+        a, b, max_value_tuple = max(lst)
+        a, b, min_value_tuple = min(lst)
+        mse = ((max_value_tuple + min_value_tuple) / len(lst)) ** 0.5
 
         return theta0, theta1, 100 - mse / 100
         # return 8499.6, -0.0214
