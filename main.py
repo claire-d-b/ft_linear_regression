@@ -7,12 +7,9 @@ def main():
     lhs = get_values(df, "km")
     rhs = get_values(df, "price")
     fig, ax = subplots()
-    for i in range(1000, 10000):
-        theta_0, theta_1 = train_model(lhs, rhs, i)
-        display_points(fig, ax, lhs, rhs, theta_0, theta_1)
-        print("theta_0", theta_0)
-        print("theta_1", theta_1)
+    theta_0, theta_1, se = train_model(lhs, rhs, 1000)
     display_points(fig, ax, lhs, rhs, theta_0, theta_1)
+    print("precision in %:", se * 100)
 
 if __name__ == "__main__":
     try:

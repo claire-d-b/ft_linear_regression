@@ -73,17 +73,11 @@ def display_points(fig: any, ax: any, frame_x: DataFrame, frame_y: DataFrame, b:
         y_pred.insert(i, coeff * unit + b)
     ax.plot(normalize(frame_x), normalize_list(y_pred))
     ax.scatter(normalize(frame_x), normalize(frame_y))
-    # print("nonox", normalize(frame_x))
-    # print("nonoy", normalize(frame_y))
 
     tight_layout()
     savefig('output_normalized')
     show()
 
-    ax.scatter(frame_x, frame_y)
-
-    tight_layout()
-    savefig('output_real', dpi=100)
 
 
 
