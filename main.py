@@ -7,9 +7,9 @@ def main():
     lhs = get_values(df, "km")
     rhs = get_values(df, "price")
     fig, ax = subplots()
-    theta_0, theta_1, se = train_model(lhs, rhs, 1000)
+    theta_0, theta_1, mse = train_model(lhs, rhs, 1000)
     display_points(fig, ax, lhs, rhs, theta_0, theta_1)
-    print("precision in %:", se * 100)
+    print("precision in %:", mse)
 
 if __name__ == "__main__":
     try:
