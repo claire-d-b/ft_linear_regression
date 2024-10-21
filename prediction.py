@@ -1,5 +1,6 @@
-from give_price import load, get_values, display_points
+from give_price import load, get_values
 from train_model import train_model
+
 
 def main():
     theta_0 = 0

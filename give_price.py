@@ -1,14 +1,14 @@
-from matplotlib.pyplot import legend, savefig, tight_layout, subplots, show, plot
-from matplotlib.animation import FuncAnimation
+from matplotlib.pyplot import savefig, tight_layout, show
 from pandas import DataFrame, read_csv
 
 
 def load(path: str) -> DataFrame:
-    """Function that opens a file and display inner data in the shape of a datatable"""
-    num_rows, num_cols = 0, 0
+    """Function that opens a file and display inner data in the shape
+    of a datatable"""
     try:
-        # Ici open est un gestionnaire de contexte qui retourne un object-fichier
-        file = read_csv(path)  # Replace with the actual file path
+        # Ici open est un gestionnaire de contexte qui retourne un
+        # object-fichier
+        file = read_csv(path)
 
     except Exception as e:
         raise AssertionError(f"Error: {e}")
@@ -39,11 +39,11 @@ def get_values(df: DataFrame, keyword: str) -> DataFrame:
 
         col = df[keyword]
 
-
     except Exception as e:
         raise AssertionError(f"Error: {e}")
 
     return col
+
 
 def normalize(values: DataFrame) -> DataFrame:
 
@@ -65,7 +65,9 @@ def normalize_list(values: list) -> list:
 
     return nvalues
 
-def display_points(fig: any, ax: any, frame_x: DataFrame, frame_y: DataFrame, b: float, coeff: float) -> None:
+
+def display_points(fig: any, ax: any, frame_x: DataFrame, frame_y: DataFrame,
+                   b: float, coeff: float) -> None:
 
     y_pred = []
 
@@ -77,8 +79,3 @@ def display_points(fig: any, ax: any, frame_x: DataFrame, frame_y: DataFrame, b:
     tight_layout()
     savefig('output_normalized')
     show()
-
-
-
-
-
