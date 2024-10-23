@@ -48,6 +48,6 @@ def train_model(lhs: DataFrame, rhs: DataFrame, iterations: int) -> tuple:
         mse = ((max_value_tuple + min_value_tuple) / len(lst)) ** 0.5
 
         return ntheta_0, ntheta_1, 100 - mse / 100
-        # return 8499.6, -0.0214
+
     except Exception as e:
         raise AssertionError(f"Error: {e}")

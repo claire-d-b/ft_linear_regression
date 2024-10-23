@@ -1,5 +1,6 @@
-from matplotlib.pyplot import savefig, tight_layout, show
+from matplotlib.pyplot import savefig, tight_layout, show, subplots
 from pandas import DataFrame, read_csv
+from train_model import train_model
 
 
 def load(path: str) -> DataFrame:
@@ -20,23 +21,8 @@ def get_values(df: DataFrame, keyword: str) -> DataFrame:
     the two keywords (countries) data"""
     try:
         isinstance(df, DataFrame)
+        
         # Search for a keyword in the entire DataFrame
-
-        # lambda function sets all char to lowercase do we
-        # talk about case-insensititvity then it searches for the
-        # keyword in all lowercase words
-        # axis=1 means "row-wise"
-        # Finally, df[...] filters the rows where the condition is True.
-        # In other words, it selects the rows where the keyword was found
-        # in at least one of the columns.
-
-        # To reindex a boolean Series so that it matches a DataFrame's
-        # index, you can use the .reindex() method in pandas.
-        # This method adjusts the index of the boolean Series to match the
-        # DataFrame’s index, filling any missing values with False
-        # (or another value of your choice) to ensure proper alignment.
-        # print(df.columns)
-
         col = df[keyword]
 
     except Exception as e:
@@ -49,13 +35,15 @@ def normalize(values: DataFrame) -> DataFrame:
 
     nvalues = []
     for i, unit in enumerate(values):
-        nvalues.insert(i, unit / values.max())
+        try:
+            nvalues.insert(i, unit / values.max())
+        except Exception as e:
+            raise AssertionError(f"Error: {e}")
 
     return DataFrame(nvalues)
 
 
 def normalize_list(values: list) -> list:
-    # flattened_values = [item for sublist in values for item in sublist]
     nvalues = []
     for i, unit in enumerate(values):
         try:
@@ -65,6 +53,20 @@ def normalize_list(values: list) -> list:
 
     return nvalues
 
+def create_figure(exp: int, lhs: DataFrame, rhs: DataFrame) -> tuple:
+    theta_0 = 0
+    theta_1 = 0
+    limit = float('inf')
+    fig, ax = subplots()
+    for i in range(10 * exp): # try with max value 10,000 and wait
+        theta_0, theta_1, mse = train_model(lhs, rhs, 10 ** exp)
+        if mse < limit:
+            limit = mse
+            exp += 1
+    display_points(fig, ax, lhs, rhs, theta_0, theta_1)
+    
+    return theta_0, theta_1, mse
+
 
 def display_points(fig: any, ax: any, frame_x: DataFrame, frame_y: DataFrame,
                    b: float, coeff: float) -> None:
@@ -73,9 +75,11 @@ def display_points(fig: any, ax: any, frame_x: DataFrame, frame_y: DataFrame,
 
     for i, unit in enumerate(frame_x):
         y_pred.insert(i, coeff * unit + b)
+
     ax.plot(normalize(frame_x), normalize_list(y_pred))
     ax.scatter(normalize(frame_x), normalize(frame_y))
 
     tight_layout()
     savefig('output_normalized')
     show()
+
