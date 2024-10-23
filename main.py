@@ -1,6 +1,4 @@
-from matplotlib.pyplot import subplots
-from give_price import load, get_values, display_points, create_figure
-from train_model import train_model
+from give_price import load, get_values, create_figure
 
 
 def main():

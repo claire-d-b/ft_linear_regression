@@ -21,7 +21,7 @@ def get_values(df: DataFrame, keyword: str) -> DataFrame:
     the two keywords (countries) data"""
     try:
         isinstance(df, DataFrame)
-        
+
         # Search for a keyword in the entire DataFrame
         col = df[keyword]
 
@@ -53,18 +53,19 @@ def normalize_list(values: list) -> list:
 
     return nvalues
 
+
 def create_figure(exp: int, lhs: DataFrame, rhs: DataFrame) -> tuple:
     theta_0 = 0
     theta_1 = 0
     limit = float('inf')
     fig, ax = subplots()
-    for i in range(10 * exp): # try with max value 10,000 and wait
+    for i in range(10 * exp):   # try with max value 10,000 and wait
         theta_0, theta_1, mse = train_model(lhs, rhs, 10 ** exp)
         if mse < limit:
             limit = mse
             exp += 1
     display_points(fig, ax, lhs, rhs, theta_0, theta_1)
-    
+
     return theta_0, theta_1, mse
 
 
@@ -82,4 +83,3 @@ def display_points(fig: any, ax: any, frame_x: DataFrame, frame_y: DataFrame,
     tight_layout()
     savefig('output_normalized')
     show()
-
