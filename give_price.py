@@ -1,4 +1,4 @@
-from matplotlib.pyplot import savefig, tight_layout, show, subplots
+from matplotlib.pyplot import savefig, tight_layout, show, subplots, ylim
 from pandas import DataFrame, read_csv
 from train_model import train_model
 
@@ -35,10 +35,7 @@ def normalize(values: DataFrame) -> DataFrame:
 
     nvalues = []
     for i, unit in enumerate(values):
-        try:
-            nvalues.insert(i, unit / values.max())
-        except Exception as e:
-            raise AssertionError(f"Error: {e}")
+        nvalues.insert(i, unit / values.max())
 
     return DataFrame(nvalues)
 
@@ -46,10 +43,7 @@ def normalize(values: DataFrame) -> DataFrame:
 def normalize_list(values: list) -> list:
     nvalues = []
     for i, unit in enumerate(values):
-        try:
-            nvalues.insert(i, unit / max(values))
-        except Exception as e:
-            raise AssertionError(f"Error: {e}")
+        nvalues.insert(i, unit / max(values))
 
     return nvalues
 
@@ -59,11 +53,13 @@ def create_figure(exp: int, lhs: DataFrame, rhs: DataFrame) -> tuple:
     theta_1 = 0
     limit = float('inf')
     fig, ax = subplots()
-    for i in range(10 * exp):   # try with max value 10,000 and wait
-        theta_0, theta_1, mse = train_model(lhs, rhs, 10 ** exp)
-        if mse < limit:
-            limit = mse
-            exp += 1
+
+    iterations = 1000
+    theta_0, theta_1, mse = train_model(lhs, rhs, iterations)
+    print("theta_1", theta_1)
+    print("theta_0", theta_0)
+    print("mse", mse)
+
     display_points(fig, ax, lhs, rhs, theta_0, theta_1)
 
     return theta_0, theta_1, mse
@@ -75,7 +71,7 @@ def display_points(fig: any, ax: any, frame_x: DataFrame, frame_y: DataFrame,
     y_pred = []
 
     for i, unit in enumerate(frame_x):
-        y_pred.insert(i, coeff * unit + b)
+        y_pred.append(coeff * unit + b)
 
     ax.plot(normalize(frame_x), normalize_list(y_pred))
     ax.scatter(normalize(frame_x), normalize(frame_y))

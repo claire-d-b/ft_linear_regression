@@ -4,50 +4,55 @@ from pandas import DataFrame
 def train_model(lhs: DataFrame, rhs: DataFrame, iterations: int) -> tuple:
     theta_0 = 0
     theta_1 = 0
+    ntheta_0 = 0
+    ntheta_1 = 0
     se = 0
     y = 0
     lst = [(0, 0, 0)]
-    index = 0
+
     i = 0
     mse = 0
+    minimum = float("inf")
     try:
         for i in range(iterations):
-            theta_1 = float(i / iterations)
+            theta_1 = i / iterations
 
             for j, (x_unit, y_unit) in enumerate(zip(lhs, rhs)):
-                y = theta_1 * x_unit + theta_0
-                # at first iteration, affect a first value / state
-                # to the se (square error) variable
-                if i == 0:
-                    # first square error calculation
-                    se = (y - y_unit) ** 2
-                    theta_0 = - theta_1 * x_unit - y
-                    lst.insert(j, (theta_0, theta_1, se))
-                    # sets the index at which the square error is
-                    # the smallest
-                    index = j
 
-                elif ((y - y_unit) ** 2 < se):
-                    # take the smaller value of the square error to minimize
-                    # the sse (sum of square errors)
-                    se = (y - y_unit) ** 2
-                    theta_0 = - theta_1 * x_unit - y
-                    lst.insert(j, (theta_0, theta_1, se))
-                    # sets the index at which the square error is
-                    # the smallest
-                    index = j
+                # y = ax + b
+                # y - b = ax
+                # -b = ax - y
+                # b = -(ax - y)
+                theta_0 = theta_1 * x_unit + y
+                # y = ax + b
+                #-ax = -y + b
+                #-a = (-y + b) / x
+                #a = -(-y + b) / x
+                # theta_1 = y - theta_0 / x_unit
 
-        # take smallest square error value and set the related theta_0
-        ntheta_0 = - lst[index][0] * 0.1  # step unit in the graph normalized
-        # (btw 0 and 1)
-        # same with the theta_1
-        ntheta_1 = - lst[index][1] / len(lhs)
+                y = -theta_1 * x_unit + theta_0
 
-        _, _, max_value_tuple = max(lst, key=lambda x: x[2])
-        _, _, min_value_tuple = min(lst, key=lambda x: x[2])
-        mse = ((max_value_tuple + min_value_tuple) / len(lst)) ** 0.5
+                # first square error calculation
+                se = (y - y_unit) ** 2
 
-        return ntheta_0, ntheta_1, 100 - mse / 100
+                lst.append((theta_0, theta_1, se))
+
+                if se < minimum:
+                    minimum = se
+                    print("min_sq_err", se)
+            
+            # Sort tuple list by Nth element of tuple
+            # using sort() + lambda
+            lst.sort(key = lambda x: x[2])
+            # This reverses all the pairs, uses min() as normal (comparing the new first number
+            # before comparing the second), and then un-reverses that resulting tuple back to the
+            # original format.
+            # ntheta_0, ntheta_1, min_value_tuple = min_tuple
+            # mse = min_value_tuple ** 0.5
+        print("0", lst[len(lst) - 1][0])
+        print("0", lst[len(lst) - 1][1])
+        print("0", lst[1][2])
+        return lst[len(lst) - 1][0], lst[len(lst) - 1][1], lst[len(lst) - 1][2]
 
     except Exception as e:
         raise AssertionError(f"Error: {e}")
